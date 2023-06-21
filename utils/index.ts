@@ -1,7 +1,8 @@
-import { CarProps } from "types"
+import { CarProps, FilterProps } from 'types'
 
-export const fetchCars = async () => {
-	const url = 'https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?model=corolla'
+export const fetchCars = async (filters: FilterProps) => {
+	const { fuel, limit, manufacturer, model, year } = filters
+	const url = `https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?make=${manufacturer}&year=${year}&model=${model}&limit=${limit}&fuel_type=${fuel}`
 	const headers = {
 		'X-RapidAPI-Key': '76d3c74acbmsh09cd027bf438eb6p192b89jsn76a9d5ea89c8',
 		'X-RapidAPI-Host': 'cars-by-api-ninjas.p.rapidapi.com',
@@ -17,9 +18,9 @@ export const fetchCars = async () => {
 }
 
 export const calculateCarRent = (city_mpg: number, year: number) => {
-	const basePricePerDay = 50 
-	const mileageFactor = 0.1 
-	const ageFactor = 0.05 
+	const basePricePerDay = 50
+	const mileageFactor = 0.1
+	const ageFactor = 0.05
 
 	// Calculate additional rate based on mileage and age
 	const mileageRate = city_mpg * mileageFactor
@@ -32,26 +33,21 @@ export const calculateCarRent = (city_mpg: number, year: number) => {
 }
 
 export const updateSearchParams = (type: string, value: string) => {
-	// Get the current URL search params
 	const searchParams = new URLSearchParams(window.location.search)
 
-	// Set the specified search parameter to the given value
 	searchParams.set(type, value)
 
-	// Set the specified search parameter to the given value
 	const newPathname = `${window.location.pathname}?${searchParams.toString()}`
 
 	return newPathname
 }
 
 export const deleteSearchParams = (type: string) => {
-	// Set the specified search parameter to the given value
+
 	const newSearchParams = new URLSearchParams(window.location.search)
 
-	// Delete the specified search parameter
 	newSearchParams.delete(type.toLocaleLowerCase())
 
-	// Construct the updated URL pathname with the deleted search parameter
 	const newPathname = `${
 		window.location.pathname
 	}?${newSearchParams.toString()}`
